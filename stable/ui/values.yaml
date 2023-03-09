@@ -1,0 +1,58 @@
+# Default values for ui.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: waddahahmad/ui
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+ui:
+  network:
+    name: ui-port
+    containerPort: 3000
+    protocol: TCP
+  command: [nginx, -g, daemon off;]
+  uiConf: 
+    REACT_APP_SERVER: ilb-gateway.internal-gw.svc.cluster.local
+  nginxConf:
+    nginx.conf: |
+      worker_processes 4;
+
+      events { worker_connections 1024; }
+
+      http {
+
+          proxy_http_version 1.1;
+          upstream api {
+          server host.docker.internal;
+          
+      }
+          server {
+              listen 3000;
+              error_log /var/log/nginx/error.log debug;
+
+              location / {
+                  root  /usr/share/nginx/html;
+                  include /etc/nginx/mime.types;
+                  try_files $uri $uri/ /index.html;
+              }
+              location /api/ {
+                  proxy_pass http://api;
+                  proxy_set_header Host user-interface;
+                  proxy_set_header authorization $http_cookie;
+
+              }
+          }
+      }
+
+imagePullSecrets: []
+
+
+service:
+  type: LoadBalancer
+  port: 3000
+  targetPort: 3000

@@ -1,0 +1,8 @@
+hooks:
+- events:
+  - presync
+  showlogs: true
+  command: sh
+  args:
+    - -c
+    - "kubectl label --dry-run=client -o yaml --overwrite namespace application istio-injection=enabled | kubectl apply -f -"

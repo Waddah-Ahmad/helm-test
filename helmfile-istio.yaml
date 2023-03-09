@@ -1,0 +1,43 @@
+helmDefaults:
+  createNamespace: true
+  waitForJobs: true
+
+repositories:
+ - name: istio
+   url: https://istio-release.storage.googleapis.com/charts
+
+
+
+
+releases:
+- name: istiod
+  namespace: istio-system
+  chart: istio/istiod 
+
+
+
+- name: ilb-gateway
+  namespace: istio-ingress
+  chart: istio/gateway 
+  needs:
+  - istio-system/istiod
+  # values:
+  #   - extraDeploy:
+  #     - |-
+  #       apiVersion: networking.istio.io/v1alpha3
+  #       kind: Gateway
+  #       metadata:
+  #         name: ilb-gateway
+  #         namespace: istio-ingress
+  #       spec:
+  #         selector:
+  #           istio: ilb-gateway # use Istio internal gateway implementation
+  #         servers:
+  #         - port:
+  #             number: 80
+  #             name: http
+  #             protocol: HTTP
+  #           hosts:
+  #           - application/*
+
+ 

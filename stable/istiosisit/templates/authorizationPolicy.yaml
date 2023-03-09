@@ -1,0 +1,15 @@
+{{- if .Values.istio.enabled -}}
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .Chart.name}}-polices
+spec:
+  selector:
+    matchLabels:
+      app: auth
+  action: ALLOW
+  rules:
+  - to: 
+    - operation:
+        paths: ["/api/user/*"]
+{{- end }}

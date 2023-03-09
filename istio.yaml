@@ -1,0 +1,12 @@
+helmDefaults:
+  createNamespace: true
+
+repositories:
+ - name: istio
+   url: https://istio-release.storage.googleapis.com/charts
+
+
+releases:
+- name: istio-base
+  namespace: istio-system
+  chart: istio/base

@@ -1,0 +1,47 @@
+helmDefaults:
+  createNamespace: true
+
+templates:
+  app: &app
+    chart: stable/{{`{{.Release.Name }}`}}
+    namespace: application
+    missingFileHandler: "Debug"
+    values:
+    - stable/{{`{{ .Release.Name }}`}}/values.yaml
+
+  # ui: 
+  #   namespace: frontend
+
+  #   missingFileHandler: "Debug"
+  #   values:
+  #   - stable/{{`{{ .Release.Name }}`}}/values.yaml
+
+releases:
+- name: auth
+  version: 0.1.0
+  <<: *app
+
+  
+- name: streams
+  version: 0.1.0
+  <<: *app
+
+
+# - name: ap
+#   version: 0.1.0
+#   chart: stable/{{`{{.Release.Name }}`}}
+#   inherit:
+#     template: ui
+# - name: ui
+#   version: 0.1.0
+#   chart: stable/{{`{{.Release.Name }}`}}
+#   inherit:
+#     template: ui
+# hooks:
+# - events:
+#   - presync
+#   showlogs: true
+#   command: sh
+#   args:
+#     - -c
+#     - "kubectl label --dry-run=client -o yaml --overwrite namespace application istio-injection=enabled | kubectl apply -f -"

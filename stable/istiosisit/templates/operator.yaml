@@ -1,0 +1,50 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: default-installation
+spec:
+  profile: default
+  meshConfig:
+    accessLogFile: /dev/stdout
+  components:
+    ingressGateways:
+      - namespace: internal-gw
+        name: ilb-gateway
+        enabled: true
+        label: 
+          istio: internal-ingressgateway
+        k8s: 
+          serviceAnnotations:
+            networking.k8s.io/load-balancer-type: "internal"
+ 
+          
+
+        
+      # - namespace: external-gw
+      #   name: lb-gateway
+      #   enabled: true
+      #   label: 
+      #     istio: external-ingressgateway
+      #   k8s: 
+      #     serviceAnnotations:
+      #       networking.k8s.io/load-balancer-type: "external"    
+---
+# ---
+# apiVersion: install.istio.io/v1alpha1
+# kind: IstioOperator
+# metadata:
+#   namespace: istio-system
+#   name: external-gw
+# spec:
+#   profile: default
+#   components:
+#     ingressGateways:
+#       - namespace: external-gw
+#         name: lb-gateway
+#         enabled: true
+#         label: 
+#           istio: external-ingressgateway
+#         k8s: 
+#           serviceAnnotations:
+#             networking.k8s.io/load-balancer-type: "external"

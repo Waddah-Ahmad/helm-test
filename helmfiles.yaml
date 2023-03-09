@@ -1,0 +1,7 @@
+helmfiles:
+- path: istio.yaml
+- path: ./helmfile-istio.yaml
+- path: ./hooks.yaml
+- path: helmfile.yaml
+
+
